@@ -1,0 +1,319 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > UserServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.electronic.Service.Impl</a>
+</div>
+
+<h1>Coverage Summary for Class: UserServiceImpl (com.electronic.Service.Impl)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    10%
+  </span>
+  <span class="absValue">
+    (1/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    4%
+  </span>
+  <span class="absValue">
+    (2/50)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.electronic.Service.Impl;
+&nbsp;
+&nbsp;import com.electronic.Dto.PageableResponse;
+&nbsp;import com.electronic.Dto.UserDto;
+&nbsp;import com.electronic.Entity.Role;
+&nbsp;import com.electronic.Entity.User;
+&nbsp;import com.electronic.HandlingException.ResourceNotFoundException;
+&nbsp;import com.electronic.Helper.HelperClass;
+&nbsp;import com.electronic.Repository.RoleRepository;
+&nbsp;import com.electronic.Repository.UserRepository;
+&nbsp;import com.electronic.Service.UserService;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.beans.factory.annotation.Value;
+&nbsp;import org.springframework.core.io.ResourceLoader;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Pageable;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.security.crypto.password.PasswordEncoder;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import java.nio.file.Files;
+&nbsp;import java.nio.file.NoSuchFileException;
+&nbsp;import java.nio.file.Path;
+&nbsp;import java.nio.file.Paths;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.UUID;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;public class UserServiceImpl implements UserService {</b>
+&nbsp;
+<b class="fc">&nbsp;    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);</b>
+&nbsp;
+&nbsp;    @Value(&quot;${user.profile.image.path}&quot;)
+&nbsp;    private String imagePath;
+&nbsp;    @Autowired
+&nbsp;    private ModelMapper modelMapper;
+&nbsp;    @Autowired
+&nbsp;    private UserRepository userRepository;
+&nbsp;    @Autowired
+&nbsp;    private ResourceLoader resourceLoader;
+&nbsp;    @Autowired
+&nbsp;    private PasswordEncoder passwordEncoder;
+&nbsp;    @Autowired
+&nbsp;    private RoleRepository roleRepository;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public UserDto createUser(UserDto userDto) {
+&nbsp;
+<b class="nc">&nbsp;        String string = UUID.randomUUID().toString();</b>
+<b class="nc">&nbsp;        userDto.setUserId(string);</b>
+&nbsp;        // dto to entit
+<b class="nc">&nbsp;         User saveUser=  dtoToEntity(userDto);</b>
+&nbsp;
+<b class="nc">&nbsp;        String encode = passwordEncoder.encode(userDto.getPassword());</b>
+<b class="nc">&nbsp;        saveUser.setPassword(encode);</b>
+<b class="nc">&nbsp;        Role role = new Role();</b>
+<b class="nc">&nbsp;        role.setRoleID(UUID.randomUUID().toString());</b>
+<b class="nc">&nbsp;        role.setName(&quot;ROLE_NORMAL&quot;);</b>
+<b class="nc">&nbsp;        Role roleNormal = roleRepository.findByName(&quot;ROLE_NORMAL&quot;).orElse(role);</b>
+<b class="nc">&nbsp;          saveUser.setRoles(Set.of(roleNormal));</b>
+<b class="nc">&nbsp;        User save = userRepository.save(saveUser);</b>
+&nbsp;        // for set the userId
+&nbsp;
+&nbsp;        // entity  to dto
+<b class="nc">&nbsp;        UserDto userDto1 = entityToDto(save);</b>
+<b class="nc">&nbsp;        return userDto1;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public UserDto updateUser(UserDto userDto, String userId) {
+<b class="nc">&nbsp;        User user = userRepository.findById(userId).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;User not found With given Id&quot;));</b>
+<b class="nc">&nbsp;        user.setName(userDto.getName());</b>
+<b class="nc">&nbsp;        user.setEmail(userDto.getEmail());</b>
+<b class="nc">&nbsp;        user.setPassword(passwordEncoder.encode(userDto.getPassword()));</b>
+<b class="nc">&nbsp;        user.setGender(userDto.getGender());</b>
+<b class="nc">&nbsp;        user.setAbout(userDto.getAbout());</b>
+<b class="nc">&nbsp;        user.setImageName(userDto.getImageName());</b>
+<b class="nc">&nbsp;        User save = userRepository.save(user);</b>
+<b class="nc">&nbsp;        UserDto userDto1 = entityToDto(save);</b>
+<b class="nc">&nbsp;        return userDto1;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void deleteUser(String userId) {
+&nbsp;
+<b class="nc">&nbsp;        User user = userRepository.findById(userId).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;User Not found with given Id &quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        String fullpath = imagePath + user.getImageName();</b>
+&nbsp;
+&nbsp;       try{
+<b class="nc">&nbsp;           Path path = Paths.get(fullpath);</b>
+<b class="nc">&nbsp;           Files.delete(path);</b>
+&nbsp;       }
+&nbsp;       catch (NoSuchFileException x)
+&nbsp;       {
+<b class="nc">&nbsp;           logger.info(&quot;user image not found&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;           x.printStackTrace();</b>
+&nbsp;       }
+&nbsp;       catch (Exception e)
+&nbsp;       {
+<b class="nc">&nbsp;          e.printStackTrace();</b>
+&nbsp;       }
+<b class="nc">&nbsp;        userRepository.delete(user);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public PageableResponse&lt;UserDto&gt; findAllUser(int pageNumber, int pageSize , String sortBy, String sortDir) {
+&nbsp;
+<b class="nc">&nbsp;     Sort sort = (sortDir.equalsIgnoreCase(&quot;desc&quot;)) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());</b>
+&nbsp;//        Sort sort = Sort.by(sortBy);
+<b class="nc">&nbsp;        Pageable pageable = PageRequest.of(pageNumber, pageSize , sort);</b>
+<b class="nc">&nbsp;        Page&lt;User&gt; all = userRepository.findAll(pageable);</b>
+&nbsp;
+&nbsp;
+&nbsp;//        List&lt;User&gt; content = all.getContent();
+&nbsp;//        // we need to return UserDto
+&nbsp;//        // yaha ek ek user milega usko collect karenge
+&nbsp;//        List&lt;UserDto&gt; collect = content.stream().map(user -&gt; entityToDto(user)).collect(Collectors.toList());
+&nbsp;//
+&nbsp;//
+&nbsp;//        PageableResponse&lt;UserDto&gt; response= new PageableResponse&lt;&gt;();
+&nbsp;//        response.setContents(collect);
+&nbsp;//        response.setPageNumber(all.getNumber());
+&nbsp;//        response.setTotalPage(all.getTotalPages());
+&nbsp;//        response.setPageSize(all.getSize());
+&nbsp;//        response.setTotalElements(all.getTotalElements());
+&nbsp;//        response.setLastPage(all.isLast());
+&nbsp;       // return response;
+&nbsp;
+<b class="nc">&nbsp;        PageableResponse&lt;UserDto&gt; pageableresponse = HelperClass.getPageableresponse(all, UserDto.class);</b>
+<b class="nc">&nbsp;        return pageableresponse;</b>
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public UserDto getSingleUserById(String userId) {
+&nbsp;
+<b class="nc">&nbsp;        User user = userRepository.findById(userId).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;User not found with given id&quot;));</b>
+<b class="nc">&nbsp;        UserDto userDto = entityToDto(user);</b>
+<b class="nc">&nbsp;        return userDto;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public UserDto getSingleUserByEmail(String email) {
+<b class="nc">&nbsp;        User user = userRepository.findByEmail(email).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;User not found with given email&quot;));</b>
+<b class="nc">&nbsp;        UserDto userDto = entityToDto(user);</b>
+<b class="nc">&nbsp;        return userDto;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public List&lt;UserDto&gt; searchUser(String keyword) {
+<b class="nc">&nbsp;        List&lt;User&gt; byNameContaining = userRepository.findByNameContaining(keyword);</b>
+&nbsp;
+<b class="nc">&nbsp;        List&lt;UserDto&gt; collect = byNameContaining.stream().map(user -&gt; entityToDto(user)).collect(Collectors.toList());</b>
+&nbsp;
+<b class="nc">&nbsp;        return collect;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    private UserDto entityToDto(User saveUser) {
+&nbsp;//        UserDto build = UserDto.builder()
+&nbsp;//                .userId(saveUser.getUserId())
+&nbsp;//                .about(saveUser.getAbout())
+&nbsp;//                .email(saveUser.getEmail())
+&nbsp;//                .name(saveUser.getName())
+&nbsp;//                .gender(saveUser.getGender())
+&nbsp;//                .imageName(saveUser.getImageName())
+&nbsp;//                .password(saveUser.getPassword()).build();
+&nbsp;
+&nbsp;      //  return  build;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        UserDto map = modelMapper.map(saveUser, UserDto.class);</b>
+<b class="nc">&nbsp;        return map;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    private User dtoToEntity(UserDto userDto) {
+&nbsp;
+&nbsp;//        User us =  new User();
+&nbsp;//        us.setUserId(userDto.getUserId());
+&nbsp;//        us.setName(userDto.getName());
+&nbsp;//        us.setEmail(userDto.getEmail());
+&nbsp;//        us.setGender(userDto.getGender());
+&nbsp;//        us.setPassword(userDto.getPassword());
+&nbsp;//        us.setImageName(userDto.getImageName());
+&nbsp;//        us.setAbout(userDto.getAbout());
+&nbsp;
+&nbsp;        //return  us;
+&nbsp;
+<b class="nc">&nbsp;      return   modelMapper.map(userDto,User.class);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-09-14 10:29</div>
+</div>
+</body>
+</html>

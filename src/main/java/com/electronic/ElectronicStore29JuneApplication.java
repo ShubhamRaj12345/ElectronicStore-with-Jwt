@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @SpringBootApplication
@@ -49,16 +50,17 @@ public class ElectronicStore29JuneApplication implements CommandLineRunner {
         }
 
         // ek admin user bnaya
-        User user = userRepository.findByEmail("shubhamraj@gmail.com").orElse(null);
-        if(user == null){
-            user= new User();
-            user.setName("shubhamraj");
-            user.setEmail("shubhamraj@gmail.com");
-            user.setPassword(passwordEncoder.encode("12345"));
-            user.setRoles(List.of(roleAdmin));
-            user.setUserId(UUID.randomUUID().toString());
-            userRepository.save(user);
-        }
+//        User user = userRepository.findByEmail("shubhamraj@gmail.com").orElse(null);
+//        if(user == null){
+//            user= new User();
+//            user.setName("shubhamraj");
+//            user.setEmail("shubhamraj@gmail.com");
+//
+//            user.setPassword(passwordEncoder.encode("12345"));
+//            user.setRoles(Set.of(roleAdmin));
+//            user.setUserId(UUID.randomUUID().toString());
+//            userRepository.save(user);
+//        }
 
 
     }

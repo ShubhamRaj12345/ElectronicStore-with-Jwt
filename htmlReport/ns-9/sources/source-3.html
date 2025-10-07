@@ -1,0 +1,166 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > FileServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.electronic.Service.Impl</a>
+</div>
+
+<h1>Coverage Summary for Class: FileServiceImpl (com.electronic.Service.Impl)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FileServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (1/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    11.1%
+  </span>
+  <span class="absValue">
+    (2/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.electronic.Service.Impl;
+&nbsp;
+&nbsp;import com.electronic.HandlingException.BadApiRequest;
+&nbsp;import com.electronic.Service.FileService;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.web.multipart.MultipartFile;
+&nbsp;import java.io.*;
+&nbsp;import java.nio.file.Files;
+&nbsp;import java.nio.file.Paths;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;public class FileServiceImpl implements FileService {</b>
+&nbsp;
+<b class="fc">&nbsp;    private Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);</b>
+&nbsp;    @Override
+&nbsp;    public String uploadFile(MultipartFile file, String path) throws IOException {
+&nbsp;
+<b class="nc">&nbsp;        String originalFilename = file.getOriginalFilename();</b>
+<b class="nc">&nbsp;        logger.info(&quot; File Name{} &quot;,originalFilename);</b>
+<b class="nc">&nbsp;        String string = UUID.randomUUID().toString();</b>
+<b class="nc">&nbsp;        String extension = originalFilename.substring(originalFilename.lastIndexOf(&quot;.&quot;));</b>
+<b class="nc">&nbsp;        String  fileNameWithExtension=  string+extension;</b>
+<b class="nc">&nbsp;        String fileNameWithPath= path+ File.separator+fileNameWithExtension;</b>
+<b class="nc">&nbsp;        if(extension.equalsIgnoreCase(&quot;.jpg&quot;) || extension.equalsIgnoreCase(&quot;.png&quot;) || extension.equalsIgnoreCase(&quot;jpg&quot;)){</b>
+<b class="nc">&nbsp;            File folder = new File(path);</b>
+<b class="nc">&nbsp;            if (!folder.exists())</b>
+&nbsp;            {
+<b class="nc">&nbsp;                folder.mkdirs();</b>
+&nbsp;            }
+<b class="nc">&nbsp;            Files.copy(file.getInputStream(), Paths.get(fileNameWithPath));</b>
+<b class="nc">&nbsp;            return fileNameWithExtension;</b>
+&nbsp;
+&nbsp;        }else
+&nbsp;        {
+<b class="nc">&nbsp;            throw new BadApiRequest(&quot;File with this &quot;+extension + &quot; Not Allowed&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public InputStream getResource(String path, String name) throws FileNotFoundException {
+&nbsp;
+<b class="nc">&nbsp;         String fullPath = path+File.separator + name;</b>
+<b class="nc">&nbsp;         InputStream inputStream = new FileInputStream(fullPath);</b>
+&nbsp;
+<b class="nc">&nbsp;        return inputStream;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-09-14 10:29</div>
+</div>
+</body>
+</html>

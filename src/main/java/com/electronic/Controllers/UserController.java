@@ -66,7 +66,7 @@ public class  UserController {
         return  new ResponseEntity<>(userDeletedSucessfully, HttpStatus.OK);
     }
 
-    @GetMapping("/getall")
+            @GetMapping("/getall")
 //    public  ResponseEntity<List<UserDto>> getAllUsers(
             public  ResponseEntity<PageableResponse<UserDto>> getAllUsers(
             @RequestParam (value = "pageNumber", defaultValue ="0",required = false) int pageNumber,
@@ -101,6 +101,7 @@ public class  UserController {
      }
 
      // for upload user image
+     @PreAuthorize("hasAnyRole('ADMIN','NORMAL')")
     @PostMapping("/image/{userId}")
     public ResponseEntity<ImageResponse> uploadUserImage(@PathVariable String  userId, @RequestParam ("userImage") MultipartFile image) throws IOException {
         String s = fileService.uploadFile(image, imageuploadpath);
@@ -120,6 +121,7 @@ public class  UserController {
 
         return ResponseEntity.ok(imageResponse);
     }
+    @PreAuthorize("hasAnyRole('ADMIN','NORMAL')")
     @GetMapping("/image/{userId}")
     public void  serveUserImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
         UserDto singleUserById = userService.getSingleUserById(userId);

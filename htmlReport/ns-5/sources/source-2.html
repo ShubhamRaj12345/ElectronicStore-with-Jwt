@@ -1,0 +1,178 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GlobalExceptionHandler</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.electronic.HandlingException</a>
+</div>
+
+<h1>Coverage Summary for Class: GlobalExceptionHandler (com.electronic.HandlingException)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GlobalExceptionHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (1/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    12.5%
+  </span>
+  <span class="absValue">
+    (3/24)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.electronic.HandlingException;
+&nbsp;
+&nbsp;import com.electronic.Dto.ApiResponseMessage;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.validation.FieldError;
+&nbsp;import org.springframework.validation.ObjectError;
+&nbsp;import org.springframework.web.bind.MethodArgumentNotValidException;
+&nbsp;import org.springframework.web.bind.annotation.ExceptionHandler;
+&nbsp;import org.springframework.web.bind.annotation.RestControllerAdvice;
+&nbsp;import org.springframework.web.servlet.View;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;@RestControllerAdvice
+&nbsp;public class GlobalExceptionHandler {
+&nbsp;
+&nbsp;    private final View error;
+&nbsp;    // handle resource notfound exception
+<b class="fc">&nbsp;    Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);</b>
+&nbsp;
+<b class="fc">&nbsp;    public GlobalExceptionHandler(View error) {</b>
+<b class="fc">&nbsp;        this.error = error;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @ExceptionHandler(ResourceNotFoundException.class)
+&nbsp;    public ResponseEntity&lt;ApiResponseMessage&gt; resourceNotFoundException(ResourceNotFoundException e){
+&nbsp;
+<b class="nc">&nbsp;        logger.info(&quot;Exception Handler is invoked !!&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        ApiResponseMessage resourceNotFound = ApiResponseMessage.builder()</b>
+<b class="nc">&nbsp;                .message(e.getMessage())</b>
+<b class="nc">&nbsp;                .sucess(true)</b>
+<b class="nc">&nbsp;                .status(HttpStatus.OK)</b>
+<b class="nc">&nbsp;                .build();</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(resourceNotFound,HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // for method argument notValid Exception
+&nbsp;    @ExceptionHandler(MethodArgumentNotValidException.class)
+&nbsp;    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; handleMethodArgumentNotValidExeception(MethodArgumentNotValidException ex){
+&nbsp;
+<b class="nc">&nbsp;        List&lt;ObjectError&gt; allErrors = ex.getBindingResult().getAllErrors();</b>
+&nbsp;
+<b class="nc">&nbsp;        Map&lt;String , Object&gt; response = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        allErrors.stream().forEach(error -&gt; {</b>
+<b class="nc">&nbsp;            String defaultMessage = error.getDefaultMessage();</b>
+&nbsp;
+<b class="nc">&nbsp;            String field = ((FieldError) error).getField();</b>
+&nbsp;
+<b class="nc">&nbsp;            response.put(field,defaultMessage);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        return  new ResponseEntity&lt;&gt;(response,HttpStatus.BAD_REQUEST);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @ExceptionHandler(BadApiRequest.class)
+&nbsp;    public ResponseEntity&lt;ApiResponseMessage&gt; badApiRequest(BadApiRequest e){
+&nbsp;
+<b class="nc">&nbsp;        logger.info(&quot;Exception Handler is invoked !!&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        ApiResponseMessage resourceNotFound = ApiResponseMessage.builder()</b>
+<b class="nc">&nbsp;                .message(e.getMessage())</b>
+<b class="nc">&nbsp;                .sucess(false)</b>
+<b class="nc">&nbsp;                .status(HttpStatus.BAD_REQUEST)</b>
+<b class="nc">&nbsp;                .build();</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(resourceNotFound,HttpStatus.BAD_REQUEST);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-09-14 10:29</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Products</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.electronic.Entity</a>
+</div>
+
+<h1>Coverage Summary for Class: Products (com.electronic.Entity)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">Products$HibernateInstantiator$4JRSDUUt</td>
+  </tr>
+  <tr>
+    <td class="name">Products$HibernateProxy$9XqStxVc</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.electronic.Entity;
+&nbsp;
+&nbsp;import jakarta.persistence.*;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import lombok.Data;
+&nbsp;import lombok.NoArgsConstructor;
+&nbsp;
+&nbsp;import java.util.Date;
+&nbsp;
+&nbsp;@Data
+&nbsp;@Entity
+&nbsp;@AllArgsConstructor
+&nbsp;@NoArgsConstructor
+&nbsp;@Table(name=&quot;products&quot;)
+&nbsp;public class Products {
+&nbsp;
+&nbsp;    @Id
+&nbsp;    private String productid;
+&nbsp;    private String title;
+&nbsp;    @Column(length = 1000)
+&nbsp;    private String  description;
+&nbsp;    private int price;
+&nbsp;    private int discountedPrice;
+&nbsp;    private int quantity;
+&nbsp;    private Date addedDate;
+&nbsp;    private boolean live;
+&nbsp;    private boolean stock;
+&nbsp;    private String productImageName;
+&nbsp;    @ManyToOne(fetch = FetchType.EAGER)
+&nbsp;    @JoinColumn(name = &quot;category_id&quot;)
+&nbsp;    private Category category;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-09-14 10:29</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,250 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CartServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.electronic.Service.Impl</a>
+</div>
+
+<h1>Coverage Summary for Class: CartServiceImpl (com.electronic.Service.Impl)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CartServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (1/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    2.4%
+  </span>
+  <span class="absValue">
+    (1/41)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.electronic.Service.Impl;
+&nbsp;
+&nbsp;import com.electronic.Dto.AddItemToCartRequest;
+&nbsp;import com.electronic.Dto.CartDto;
+&nbsp;import com.electronic.Entity.Cart;
+&nbsp;import com.electronic.Entity.CartItem;
+&nbsp;import com.electronic.Entity.Products;
+&nbsp;import com.electronic.Entity.User;
+&nbsp;import com.electronic.HandlingException.BadApiRequest;
+&nbsp;import com.electronic.HandlingException.ResourceNotFoundException;
+&nbsp;import com.electronic.Repository.CartItemRepository;
+&nbsp;import com.electronic.Repository.CartRepository;
+&nbsp;import com.electronic.Repository.ProductRepository;
+&nbsp;import com.electronic.Repository.UserRepository;
+&nbsp;import com.electronic.Service.CartService;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.List;
+&nbsp;import java.util.NoSuchElementException;
+&nbsp;import java.util.UUID;
+&nbsp;import java.util.concurrent.atomic.AtomicReference;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;public class CartServiceImpl implements CartService</b>
+&nbsp;{
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private ProductRepository productRepository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private UserRepository userRepository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private CartRepository cartRepository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private ModelMapper modelMapper;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private CartItemRepository cartItemRepository;
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public CartDto addItemsToCart(String userId, AddItemToCartRequest addItemToCartRequest) {
+&nbsp;
+<b class="nc">&nbsp;       int quality = addItemToCartRequest.getQuantity();</b>
+<b class="nc">&nbsp;       String  productId = addItemToCartRequest.getProductId();</b>
+&nbsp;
+<b class="nc">&nbsp;       if (quality &lt;= 0)</b>
+&nbsp;       {
+<b class="nc">&nbsp;           throw  new BadApiRequest(&quot;Requested quantity is not valid &quot;);</b>
+&nbsp;       }
+<b class="nc">&nbsp;       Products products = productRepository.findById(productId).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Product not found with given id&quot;));</b>
+&nbsp;
+&nbsp;        // fetch the user from db
+<b class="nc">&nbsp;        User user = userRepository.findById(userId).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;User not found with given id&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        Cart cart= null;</b>
+&nbsp;        try{
+<b class="nc">&nbsp;            cartRepository.findByUser(user).get();</b>
+&nbsp;
+&nbsp;        }
+&nbsp;        catch (NoSuchElementException ex)
+&nbsp;        {
+<b class="nc">&nbsp;            cart = new Cart();</b>
+<b class="nc">&nbsp;            cart.setCartId(UUID.randomUUID().toString());</b>
+<b class="nc">&nbsp;            cart.setCreatedAt(new Date());</b>
+&nbsp;        }
+&nbsp;        // if cartitems already present  then update
+&nbsp;        // perform cart operation
+&nbsp;
+&nbsp;//        boolean update = false;
+<b class="nc">&nbsp;        AtomicReference&lt;Boolean&gt; update = new AtomicReference&lt;&gt;(false);</b>
+<b class="nc">&nbsp;        List&lt;CartItem&gt; items = cart.getItems();</b>
+&nbsp;
+<b class="nc">&nbsp;        items= items.stream().map(item -&gt; {</b>
+<b class="nc">&nbsp;            if (item.getProducts().getProductid().equals(productId)) {</b>
+<b class="nc">&nbsp;                item.setQuantity(quality);</b>
+<b class="nc">&nbsp;                item.setTotalPrice(quality * products.getDiscountedPrice());</b>
+<b class="nc">&nbsp;                update .set(true);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return item;</b>
+<b class="nc">&nbsp;        }).collect(Collectors.toList());</b>
+&nbsp;
+&nbsp;//      cart.setItems(updateditems);
+&nbsp;
+&nbsp;        // create items
+<b class="nc">&nbsp;     if (!update.get())</b>
+&nbsp;     {
+<b class="nc">&nbsp;         CartItem cartItem =  CartItem .builder()</b>
+<b class="nc">&nbsp;                 .quantity(quality)</b>
+<b class="nc">&nbsp;                 .totalPrice(quality * products .getDiscountedPrice())</b>
+<b class="nc">&nbsp;                 .cart(cart)</b>
+<b class="nc">&nbsp;                 .products(products)</b>
+<b class="nc">&nbsp;                 .build();</b>
+<b class="nc">&nbsp;         cart.getItems().add(cartItem);</b>
+<b class="nc">&nbsp;         cart.setUser(user);</b>
+&nbsp;
+&nbsp;     }
+<b class="nc">&nbsp;        Cart updatedcart = cartRepository.save(cart);</b>
+&nbsp;
+<b class="nc">&nbsp;        return modelMapper.map(updatedcart,CartDto.class);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void removeItemFromCart(String userId, int cartItem) {
+&nbsp;
+&nbsp;        // conditions
+<b class="nc">&nbsp;        CartItem cartItem1 = cartItemRepository.findById(cartItem).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Item not found with given id&quot;));</b>
+<b class="nc">&nbsp;        cartItemRepository.delete(cartItem1);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void clearCart(String userId) {
+&nbsp;
+<b class="nc">&nbsp;        User user = userRepository.findById(userId).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;User not found with given id&quot;));</b>
+<b class="nc">&nbsp;        Cart cart = cartRepository.findByUser(user).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;cart of  given  user is not found &quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        cart.getItems().clear();</b>
+<b class="nc">&nbsp;        cartRepository.save(cart);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public CartDto getCartByUser(String userid) {
+&nbsp;
+<b class="nc">&nbsp;        User user = userRepository.findById(userid).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;User not found with given id&quot;));</b>
+<b class="nc">&nbsp;        Cart cart = cartRepository.findByUser(user).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;cart of  given  user is not found &quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        return modelMapper.map(cart, CartDto.class);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-09-14 10:29</div>
+</div>
+</body>
+</html>

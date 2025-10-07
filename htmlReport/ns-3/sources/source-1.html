@@ -1,0 +1,172 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AuthenticationController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.electronic.Controllers</a>
+</div>
+
+<h1>Coverage Summary for Class: AuthenticationController (com.electronic.Controllers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AuthenticationController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (1/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    18.2%
+  </span>
+  <span class="absValue">
+    (2/11)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.electronic.Controllers;
+&nbsp;
+&nbsp;import com.electronic.Dto.JwtResponse;
+&nbsp;import com.electronic.Dto.JwttRequest;
+&nbsp;import com.electronic.Dto.UserDto;
+&nbsp;import com.electronic.Entity.User;
+&nbsp;import com.electronic.Security.JwtHelper;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.security.authentication.AuthenticationManager;
+&nbsp;import org.springframework.security.authentication.BadCredentialsException;
+&nbsp;import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+&nbsp;import org.springframework.security.core.userdetails.UserDetailsService;
+&nbsp;import org.springframework.web.bind.annotation.PostMapping;
+&nbsp;import org.springframework.web.bind.annotation.RequestBody;
+&nbsp;import org.springframework.web.bind.annotation.RequestMapping;
+&nbsp;import org.springframework.web.bind.annotation.RestController;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;/auth&quot;)
+<b class="fc">&nbsp;public class AuthenticationController {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private JwtHelper jwtHelper;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private ModelMapper modelMapper;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private AuthenticationManager authenticationManager;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private UserDetailsService  userDetailsService;
+&nbsp;
+<b class="fc">&nbsp;    Logger logger = LoggerFactory.getLogger(AuthenticationController.class);</b>
+&nbsp;
+&nbsp;    @PostMapping(&quot;/generate-token&quot;)
+&nbsp;    private ResponseEntity&lt;JwtResponse&gt; login(@RequestBody JwttRequest jwttRequest) {
+&nbsp;
+<b class="nc">&nbsp;        logger.info(&quot;Username {} Password {} : &quot; ,jwttRequest.getEmail() ,jwttRequest.getPassword());</b>
+&nbsp;
+&nbsp;        // is username and password ko authenticate karne ke liye AuthenticationManager hota bo authenticate karta hai
+<b class="nc">&nbsp;     this.doauthenticate(jwttRequest.getEmail(),jwttRequest.getPassword());</b>
+&nbsp;         // generate token
+&nbsp;        // send karna hai response me
+<b class="nc">&nbsp;        User user =(User) userDetailsService.loadUserByUsername(jwttRequest.getEmail());</b>
+<b class="nc">&nbsp;        String token = jwtHelper.generateToken(user);</b>
+<b class="nc">&nbsp;        JwtResponse build = JwtResponse.builder().token(token).user(modelMapper.map(user, UserDto.class)).build();</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        return ResponseEntity.ok(build);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void doauthenticate(String email, String password) {
+&nbsp;
+&nbsp;        try{
+<b class="nc">&nbsp;            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(email, password);</b>
+<b class="nc">&nbsp;            authenticationManager.authenticate(usernamePasswordAuthenticationToken);</b>
+&nbsp;        }catch (BadCredentialsException ex){
+<b class="nc">&nbsp;            throw  new BadCredentialsException(&quot;Invalid  Username and Password&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-09-14 10:29</div>
+</div>
+</body>
+</html>

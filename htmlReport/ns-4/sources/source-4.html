@@ -1,0 +1,108 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Category</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.electronic.Entity</a>
+</div>
+
+<h1>Coverage Summary for Class: Category (com.electronic.Entity)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">Category$HibernateInstantiator$nm7yq92P</td>
+  </tr>
+  <tr>
+    <td class="name">Category$HibernateProxy$idCAijIc</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.electronic.Entity;
+&nbsp;
+&nbsp;
+&nbsp;import jakarta.persistence.*;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import lombok.Data;
+&nbsp;import lombok.NoArgsConstructor;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Entity
+&nbsp;@Table(name=&quot;category&quot;)
+&nbsp;@Data
+&nbsp;@AllArgsConstructor
+&nbsp;@NoArgsConstructor
+&nbsp;public class Category {
+&nbsp;
+&nbsp;    @Id
+&nbsp;    private  String categoryId;
+&nbsp;    @Column(name =&quot;category_title&quot;,length = 100, nullable = false)
+&nbsp;    private String title;
+&nbsp;    @Column(name = &quot;category_desc&quot; ,length = 2000)
+&nbsp;    private  String description;
+&nbsp;    private  String coverImage;
+&nbsp;
+&nbsp;    // i am going to declair a varible that can store a list of many products
+&nbsp;    // because one Category can have multiple products
+&nbsp;    // this varible represent a mapping
+&nbsp;    @OneToMany(mappedBy = &quot;category&quot;, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+&nbsp;    private List&lt;Products&gt; productsList =  new ArrayList&lt;&gt;();
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-09-14 10:29</div>
+</div>
+</body>
+</html>

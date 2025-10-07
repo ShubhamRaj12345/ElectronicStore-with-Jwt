@@ -9,10 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -40,7 +37,7 @@ public class User implements UserDetails {
     private String imageName;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Role> roles= new ArrayList<>();
+    private Set<Role> roles= new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Order> orders = new ArrayList<>();

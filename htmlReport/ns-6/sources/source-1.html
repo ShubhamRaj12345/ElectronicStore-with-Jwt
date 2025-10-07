@@ -1,0 +1,137 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > HelperClass</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.electronic.Helper</a>
+</div>
+
+<h1>Coverage Summary for Class: HelperClass (com.electronic.Helper)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">HelperClass</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.electronic.Helper;
+&nbsp;
+&nbsp;import com.electronic.Dto.PageableResponse;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+<b class="nc">&nbsp;public class HelperClass {</b>
+&nbsp;
+&nbsp;    public static &lt; U , V&gt;PageableResponse&lt;V&gt; getPageableresponse(Page &lt;U&gt; all, Class&lt;V&gt; type){
+&nbsp;
+<b class="nc">&nbsp;        List&lt;U&gt; content = all.getContent();</b>
+&nbsp;        // we need to return UserDto
+&nbsp;        // yaha ek ek user milega usko collect karenge
+<b class="nc">&nbsp;        List&lt;V&gt; collect = content.stream().map(user -&gt; new ModelMapper().map(user, type)).collect(Collectors.toList());</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        PageableResponse&lt;V&gt; response= new PageableResponse&lt;&gt;();</b>
+<b class="nc">&nbsp;        response.setContents(collect);</b>
+<b class="nc">&nbsp;        response.setPageNumber(all.getNumber());</b>
+<b class="nc">&nbsp;        response.setTotalPage(all.getTotalPages());</b>
+<b class="nc">&nbsp;        response.setPageSize(all.getSize());</b>
+<b class="nc">&nbsp;        response.setTotalElements(all.getTotalElements());</b>
+<b class="nc">&nbsp;        response.setLastPage(all.isLast());</b>
+&nbsp;
+<b class="nc">&nbsp;         return  response;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-09-14 10:29</div>
+</div>
+</body>
+</html>

@@ -20,6 +20,7 @@ import java.io.InputStream;
 
 @RestController
 @RequestMapping("/product")
+//@CrossOrigin(origins ="http://localhost:5173/")
 public class ProductsController {
 
     Logger logger = LoggerFactory.getLogger(ProductsController.class);

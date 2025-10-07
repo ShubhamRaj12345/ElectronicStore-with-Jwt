@@ -1,0 +1,291 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ProductServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.electronic.Service.Impl</a>
+</div>
+
+<h1>Coverage Summary for Class: ProductServiceImpl (com.electronic.Service.Impl)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ProductServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    9.1%
+  </span>
+  <span class="absValue">
+    (1/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    3.2%
+  </span>
+  <span class="absValue">
+    (2/62)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.electronic.Service.Impl;
+&nbsp;
+&nbsp;import com.electronic.Dto.PageableResponse;
+&nbsp;import com.electronic.Dto.ProductDto;
+&nbsp;import com.electronic.Entity.Category;
+&nbsp;import com.electronic.Entity.Products;
+&nbsp;import com.electronic.HandlingException.ResourceNotFoundException;
+&nbsp;import com.electronic.Helper.HelperClass;
+&nbsp;import com.electronic.Repository.CategoryRepository;
+&nbsp;import com.electronic.Repository.ProductRepository;
+&nbsp;import com.electronic.Service.ProductService;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.beans.factory.annotation.Value;
+&nbsp;import org.springframework.data.domain.Page;
+&nbsp;import org.springframework.data.domain.PageRequest;
+&nbsp;import org.springframework.data.domain.Pageable;
+&nbsp;import org.springframework.data.domain.Sort;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import java.nio.file.Files;
+&nbsp;import java.nio.file.NoSuchFileException;
+&nbsp;import java.nio.file.Path;
+&nbsp;import java.nio.file.Paths;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;public class ProductServiceImpl implements ProductService {</b>
+&nbsp;
+<b class="fc">&nbsp;    Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private ProductRepository productRepository;
+&nbsp;    @Autowired
+&nbsp;    private ModelMapper modelMapper;
+&nbsp;    @Autowired
+&nbsp;    private CategoryRepository categoryRepository;
+&nbsp;
+&nbsp;    @Value(&quot;${product.image.path}&quot;)
+&nbsp;    private String productImagePath;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public ProductDto createProduct(ProductDto productDto) {
+&nbsp;
+<b class="nc">&nbsp;        Products map = modelMapper.map(productDto, Products.class);</b>
+&nbsp;
+<b class="nc">&nbsp;        String string = UUID.randomUUID().toString();</b>
+<b class="nc">&nbsp;        map.setProductid(string);</b>
+<b class="nc">&nbsp;        map.setAddedDate(new Date());</b>
+&nbsp;
+<b class="nc">&nbsp;        Products save = productRepository.save(map);</b>
+<b class="nc">&nbsp;        ProductDto map1 = modelMapper.map(save, ProductDto.class);</b>
+<b class="nc">&nbsp;        return map1;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public ProductDto updateProduct(ProductDto productDto, String id) {
+<b class="nc">&nbsp;        Products products = productRepository.findById(id).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Products not Found With Given Id&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        products.setTitle(productDto.getTitle());</b>
+<b class="nc">&nbsp;        products.setDescription(productDto.getDescription());</b>
+<b class="nc">&nbsp;        products.setPrice(productDto.getPrice());</b>
+<b class="nc">&nbsp;        products.setQuantity(productDto.getQuantity());</b>
+<b class="nc">&nbsp;        products.setLive(productDto.isLive());</b>
+<b class="nc">&nbsp;        products.setStock(productDto.isStock());</b>
+<b class="nc">&nbsp;        products.setDiscountedPrice(productDto.getDiscountedPrice());</b>
+<b class="nc">&nbsp;        products.setProductImageName(productDto.getProductImageName());</b>
+<b class="nc">&nbsp;        Products save = productRepository.save(products);</b>
+&nbsp;
+<b class="nc">&nbsp;        return modelMapper.map(save, ProductDto.class);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void deleteProduct(String id) {
+<b class="nc">&nbsp;        Products products = productRepository.findById(id).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Products not Found With Given Id&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        String fullpath = productImagePath + products.getProductImageName();</b>
+&nbsp;
+&nbsp;        try{
+<b class="nc">&nbsp;            Path path = Paths.get(fullpath);</b>
+<b class="nc">&nbsp;            Files.delete(path);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        catch (NoSuchFileException e){
+<b class="nc">&nbsp;             logger.info(&quot;No such file or directory found&quot;);</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        catch (Exception ex)
+&nbsp;        {
+<b class="nc">&nbsp;            ex.printStackTrace();</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        productRepository.delete(products);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public PageableResponse&lt;ProductDto&gt; findAll(int pageNumber, int pageSize, String sortBy, String sortDir) {
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        Sort sort = (sortDir.equalsIgnoreCase(&quot;desc&quot;)) ? (Sort.by(sortBy)).descending(): (Sort.by(sortBy).ascending());</b>
+<b class="nc">&nbsp;        Pageable pageable= PageRequest.of(pageNumber, pageSize , sort);</b>
+<b class="nc">&nbsp;        Page&lt;Products&gt; all = productRepository.findAll(pageable);</b>
+<b class="nc">&nbsp;        return HelperClass.getPageableresponse(all, ProductDto.class);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public ProductDto findById(String id) {
+<b class="nc">&nbsp;        Products products = productRepository.findById(id).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Products not Found With Given Id&quot;));</b>
+<b class="nc">&nbsp;        ProductDto map = modelMapper.map(products, ProductDto.class);</b>
+<b class="nc">&nbsp;        return map;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public PageableResponse&lt;ProductDto&gt; getAllLive(int pageNumber, int pageSize, String sortBy, String sortDir) {
+<b class="nc">&nbsp;        Sort sort = (sortDir.equalsIgnoreCase(&quot;desc&quot;)) ? (Sort.by(sortBy)).descending(): (Sort.by(sortBy).ascending());</b>
+<b class="nc">&nbsp;        Pageable pageable= PageRequest.of(pageNumber, pageSize , sort);</b>
+<b class="nc">&nbsp;        Page&lt;Products&gt; byLive = productRepository.findByLiveTrue(pageable);</b>
+<b class="nc">&nbsp;        return HelperClass.getPageableresponse(byLive, ProductDto.class);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public PageableResponse&lt;ProductDto&gt; searchByTitle( String subTitle, int pageNumber, int pageSize, String sortBy, String sortDir) {
+&nbsp;
+<b class="nc">&nbsp;        Sort sort = (sortDir.equalsIgnoreCase(&quot;desc&quot;)) ? (Sort.by(sortBy)).descending(): (Sort.by(sortBy).ascending());</b>
+<b class="nc">&nbsp;        Pageable pageable= PageRequest.of(pageNumber, pageSize , sort);</b>
+<b class="nc">&nbsp;        Page&lt;Products&gt; byLive = productRepository.findByTitleContaining( subTitle, pageable);</b>
+<b class="nc">&nbsp;        return HelperClass.getPageableresponse(byLive, ProductDto.class);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public ProductDto createWithCategory(ProductDto productDto, String categoryid) {
+<b class="nc">&nbsp;        Category category = categoryRepository.findById(categoryid).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Categorys not Found With Given Id&quot;));</b>
+<b class="nc">&nbsp;        Products map = modelMapper.map(productDto, Products.class);</b>
+&nbsp;
+<b class="nc">&nbsp;        String string = UUID.randomUUID().toString();</b>
+<b class="nc">&nbsp;        map.setProductid(string);</b>
+<b class="nc">&nbsp;        map.setAddedDate(new Date());</b>
+&nbsp;
+<b class="nc">&nbsp;        map.setCategory(category);</b>
+&nbsp;
+<b class="nc">&nbsp;        Products save = productRepository.save(map);</b>
+<b class="nc">&nbsp;        ProductDto map1 = modelMapper.map(save, ProductDto.class);</b>
+<b class="nc">&nbsp;        return map1;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public ProductDto updateWithCategory(String productId, String categoryId) {
+&nbsp;        // product fetch
+<b class="nc">&nbsp;        Products products = productRepository.findById(productId).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Products not Found With Given Id&quot;));</b>
+<b class="nc">&nbsp;        Category category = categoryRepository.findById(categoryId).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Categorys not Found With Given Id&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;         products.setCategory(category);</b>
+<b class="nc">&nbsp;        Products saveProducts = productRepository.save(products);</b>
+<b class="nc">&nbsp;        return modelMapper.map(saveProducts, ProductDto.class);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public PageableResponse&lt;ProductDto&gt; getAllOfCategory(String categoryid, int pageNumber, int pageSize, String sortBy, String sortDir) {
+&nbsp;
+<b class="nc">&nbsp;        Category category = categoryRepository.findById(categoryid).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Categorys not Found With Given Id&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        Sort sort = (sortDir.equalsIgnoreCase(&quot;desc&quot;)) ? (Sort.by(sortBy)).descending(): (Sort.by(sortBy).ascending());</b>
+<b class="nc">&nbsp;        Pageable pageable = PageRequest.of(pageNumber,pageSize,sort);</b>
+&nbsp;
+<b class="nc">&nbsp;        Page&lt;Products&gt; page= productRepository.findByCategory(category ,pageable);</b>
+&nbsp;
+<b class="nc">&nbsp;        return HelperClass.getPageableresponse(page, ProductDto.class);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-09-14 10:29</div>
+</div>
+</body>
+</html>

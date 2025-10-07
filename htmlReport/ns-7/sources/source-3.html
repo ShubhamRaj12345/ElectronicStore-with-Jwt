@@ -1,0 +1,182 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > JwtHelper</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.electronic.Security</a>
+</div>
+
+<h1>Coverage Summary for Class: JwtHelper (com.electronic.Security)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">JwtHelper</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (16/16)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.electronic.Security;
+&nbsp;// this class is used to perform jwt operations
+&nbsp;
+&nbsp;
+&nbsp;import io.jsonwebtoken.Claims;
+&nbsp;
+&nbsp;import io.jsonwebtoken.Jwts;
+&nbsp;import io.jsonwebtoken.SignatureAlgorithm;
+&nbsp;import org.springframework.security.core.userdetails.UserDetails;
+&nbsp;import org.springframework.stereotype.Component;
+&nbsp;
+&nbsp;import javax.crypto.spec.SecretKeySpec;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.Objects;
+&nbsp;import java.util.function.Function;
+&nbsp;
+&nbsp;@Component
+<b class="fc">&nbsp;public class JwtHelper {</b>
+&nbsp;
+&nbsp;    //requirement
+&nbsp;    //1 validity
+&nbsp;    //2 secret key
+&nbsp;
+&nbsp;    public static  final long token_Validity = 5* 60*60*1000;  // it is converted into milisecond
+&nbsp;
+&nbsp;    public  static  final  String  SECRET_KEY= &quot;asdogfsaogfnsanfosfhwasfnsofnsfsfosianfowehroiwgafsadfwiotbhwfsfnfwhoahwafnsfawofhwqohtwsnfsaf&quot;;
+&nbsp;
+&nbsp;
+&nbsp;    // Get username from the token
+&nbsp;    public String getUsernameFromToken(String token) {
+<b class="fc">&nbsp;        return getClaimFromToken(token, Claims::getSubject);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Generic method to extract claims using a resolver function
+&nbsp;    public &lt;T&gt; T getClaimFromToken(String token, Function&lt;Claims, T&gt; claimsResolver) {
+<b class="fc">&nbsp;        final Claims claims = getAllClaimsFromToken(token);</b>
+<b class="fc">&nbsp;        return claimsResolver.apply(claims);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    // This method is assumed to parse the token and return all claims
+&nbsp;    private Claims getAllClaimsFromToken(String token) {
+&nbsp;
+&nbsp;        // 0.12.5
+<b class="fc">&nbsp;        return Jwts.parser().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getPayload();</b>
+&nbsp;//        SignatureAlgorithm hs512 = SignatureAlgorithm.HS512;
+&nbsp;//       SecretKeySpec key =  new SecretKeySpec(secretkey.getBytes(), hs512.getJcaName());
+&nbsp;//        return Jwts.parser().verifyWith(key).build().parseClaimsJws(token).getBody();
+&nbsp;    }
+&nbsp;
+&nbsp;    // get if the token is expired
+&nbsp;    public  Boolean isTokenExpired(String token) {
+<b class="fc">&nbsp;        final  Date expiration = getExpirationDateFromtoken(token);</b>
+<b class="fc">&nbsp;        return expiration.before(new Date());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Date getExpirationDateFromtoken(String token) {
+<b class="fc">&nbsp;        return  getClaimFromToken(token, Claims::getExpiration);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // generate token for user
+&nbsp;    public String generateToken(UserDetails userDetails) {
+<b class="fc">&nbsp;        Map&lt;String, Object&gt; claims = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        return doGenerateToken(claims, userDetails.getUsername());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String doGenerateToken(Map&lt;String, Object&gt; claims, String subject) {
+&nbsp;
+<b class="fc">&nbsp;        return Jwts.builder()</b>
+<b class="fc">&nbsp;                .setClaims(claims)</b>
+<b class="fc">&nbsp;                .setSubject(subject)</b>
+<b class="fc">&nbsp;                .setIssuedAt(new Date(System.currentTimeMillis()))</b>
+<b class="fc">&nbsp;                .setExpiration(new Date(System.currentTimeMillis() + token_Validity))</b>
+<b class="fc">&nbsp;                .signWith(SignatureAlgorithm.HS512, SECRET_KEY).compact();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-09-14 10:29</div>
+</div>
+</body>
+</html>

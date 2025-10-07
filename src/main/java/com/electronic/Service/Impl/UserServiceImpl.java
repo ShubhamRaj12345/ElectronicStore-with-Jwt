@@ -26,6 +26,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -62,7 +63,7 @@ public class UserServiceImpl implements UserService {
         role.setRoleID(UUID.randomUUID().toString());
         role.setName("ROLE_NORMAL");
         Role roleNormal = roleRepository.findByName("ROLE_NORMAL").orElse(role);
-          saveUser.setRoles(List.of(roleNormal));
+          saveUser.setRoles(Set.of(roleNormal));
         User save = userRepository.save(saveUser);
         // for set the userId
 

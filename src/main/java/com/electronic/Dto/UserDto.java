@@ -8,7 +8,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -39,5 +41,5 @@ public class UserDto {
     @ImageNameValid
     private String imageName;
 
-    private List<RoleDto> roles;
+    private Set<RoleDto> roles = new HashSet<>();
 }

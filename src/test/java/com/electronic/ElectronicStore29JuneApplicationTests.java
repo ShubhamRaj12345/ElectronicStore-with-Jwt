@@ -30,7 +30,7 @@ class ElectronicStore29JuneApplicationTests {
           String  name = "shubham";
 
         User user = userRepository.findByEmail("shubhamraj@gmail.com").get();
-        String issuerFromToken = jwtHelper.getIssuerFromToken(user);
+        String issuerFromToken = jwtHelper.generateToken(user);
 
         System.out.println(issuerFromToken);
 

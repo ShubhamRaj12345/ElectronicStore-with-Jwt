@@ -1,0 +1,111 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > UserDto</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.electronic.Dto</a>
+</div>
+
+<h1>Coverage Summary for Class: UserDto (com.electronic.Dto)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">UserDto</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.electronic.Dto;
+&nbsp;
+&nbsp;import com.electronic.Entity.Role;
+&nbsp;import com.electronic.Validate.ImageNameValid;
+&nbsp;import jakarta.validation.constraints.*;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import lombok.Builder;
+&nbsp;import lombok.Data;
+&nbsp;import lombok.NoArgsConstructor;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Data
+&nbsp;@AllArgsConstructor
+&nbsp;@NoArgsConstructor
+&nbsp;@Builder
+&nbsp;public class UserDto {
+&nbsp;
+&nbsp;    private String  userId;
+&nbsp;    @NotBlank(message = &quot;Enter name&quot;)
+&nbsp;    @Size(min = 1, max = 20,message = &quot;Invalid name&quot;)
+&nbsp;    private String  name;
+&nbsp;
+&nbsp;    @Email(message=&quot;invalid user email&quot;)
+&nbsp;    @Pattern(regexp = &quot;(?:[a-z0-9!#$%&amp;&#39;*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&amp;&#39;*+/=?^_`{|}~-]+)*|\&quot;(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\&quot;)@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])&quot;,message =&quot;Invalid user email&quot;)
+&nbsp;    private String email;
+&nbsp;
+&nbsp;    @NotBlank(message = &quot;password is required&quot;)
+&nbsp;//    @Min(value = 5,message =&quot;password is minimum 5 required&quot;)
+&nbsp;//    @Max(value = 10, message = &quot;maximum password is 10 &quot;)
+&nbsp;    private String password;
+&nbsp;
+&nbsp;    @Size(min = 4, max = 6,message = &quot;Invalid gender&quot;)
+&nbsp;    private String gender;
+&nbsp;
+&nbsp;    @NotBlank(message =&quot;write something about yourself&quot;)
+&nbsp;    private  String about;
+&nbsp;
+&nbsp;    @ImageNameValid
+&nbsp;    private String imageName;
+&nbsp;
+&nbsp;    private List&lt;RoleDto&gt; roles;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-09-14 10:29</div>
+</div>
+</body>
+</html>
